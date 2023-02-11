@@ -24,3 +24,11 @@ val TextNameStyle = TextStyle(
     fontSize = 28.sp,
     textAlign = TextAlign.Center
 )
+
+val TextInputStyle = TextStyle(
+    color = BlackName.copy(alpha = 0.1f),
+    fontFamily = DigitalNumbers,
+    fontSize = 40.sp,
+    textAlign = TextAlign.Center
+
+)
