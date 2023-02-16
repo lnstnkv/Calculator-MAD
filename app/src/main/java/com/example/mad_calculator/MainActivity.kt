@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mad_calculator.ui.theme.*
@@ -27,6 +28,8 @@ class MainActivity : ComponentActivity() {
                     NameApp()
                     Input()
                     TableButtons()
+
+
                 }
             }
         }
@@ -61,74 +64,54 @@ fun NameApp() {
 @Composable
 fun TableButtons() {
     Spacer(modifier = Modifier.height(16.dp))
-    val namesButtons = listOf(
-        listOf("AC", "+/-", "%", "÷"),
-        listOf("7", "8", "9", "X"),
-        listOf("4", "5", "6", "-"),
-        listOf("1", "2", "3", "+"),
-        listOf("0","0", ",", "=")
-    )
-    Column() {
-        for (row in namesButtons) {
-            RowButton(row)
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-    }
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        val sequenceSymbols = CalcSymbols.values().toList().chunked(4)
+        sequenceSymbols.forEach { row ->
+            Row(
+                Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth(), Arrangement.SpaceBetween
+            ) {
+                row.forEachIndexed { index, symbol ->
 
-}
+                    CalcButton(
+                        s = symbol,
+                        background = if (index == 3) Blue else WhiteDefault,
+                        textColor = if (index == 3) Color.White else Blue,
+                        modifier =
+                            Modifier
+                                .width(80.dp)
+                                .height(80.dp)
 
-@Composable
-fun RowButton(namesButtons: List<String>) {
-    Row(
-        Modifier
-            .padding(8.dp)
-            .fillMaxWidth(), Arrangement.SpaceBetween
-    ) {
-        for (i in 0..3) {
-            if (i == 3) {
-                MathOperationSignsButton(namesButtons[i])
+                    )
+
+                    Spacer(modifier = Modifier.width(16.dp))
+                }
             }
-            WhiteButton(namesButtons[i])
-            Spacer(modifier = Modifier.width(16.dp))
         }
     }
+
 }
 
-
 @Composable
-fun WhiteButton(s: String) {
+fun CalcButton(
+    s: CalcSymbols,
+    background: Color,
+    textColor: Color,
+    modifier: Modifier
+) {
     Button(
         onClick = {
 
         },
         shape = RoundedCornerShape(25),
         elevation = null,
-        colors = buttonColors(backgroundColor = WhiteDefault),
-        modifier = Modifier
-            .width(80.dp)
-            .height(80.dp)
+        colors = buttonColors(backgroundColor = background),
+        modifier = modifier
     ) {
-        Text(text = s, style = TextWhiteButtonStyle)
+        Text(text = s.displayValue, style = TextButtonStyle, color = textColor)
     }
 }
-
-@Composable
-fun MathOperationSignsButton(s: String) {
-    Button(
-        onClick = {
-
-        },
-        shape = RoundedCornerShape(25),
-        elevation = null,
-        colors = buttonColors(backgroundColor = Blue),
-        modifier = Modifier
-            .width(80.dp)
-            .height(80.dp)
-    ) {
-        Text(text = s, style = TexBlueButtonStyle)
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
